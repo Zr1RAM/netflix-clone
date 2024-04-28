@@ -66,12 +66,51 @@ const getUser = asyncWrapper(async (req, res, next) => {
 const getAllUsers = asyncWrapper(async (req, res, next) => {
     const query = req.query.new;
     if(req.userInfo.isAdmin) {
-        const users = query ? await User.find().limit(10) : await User.find();
+        //                          apparently .sort({ _id: -1 }) gives us in reverse order or order of which one is newer
+        const users = query ? await User.find().sort({ _id: -1 }).limit(10) : await User.find();
         return res.status(StatusCodes.OK).json(users);
     } else {
         return next(createCustomError('You do not have access for this operation', StatusCodes.UNAUTHORIZED));
     }
 });
 // Get User Stats
+const getStats = asyncWrapper(async (req, res, next) => {
+    const today = new Date();
+    const lastYear = today.setFullYear(today.setFullYear() - 1);
 
-module.exports = { updateUser, deleteUser, getUser, getAllUsers };
+    const monthsArray = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+    ];
+
+    try {
+        const data = await User.aggregate([
+            {
+                $project: {
+                    month: {$month: "$createdAt"}
+                }
+            }, 
+            {
+                $group: {
+                    _id: "$month", 
+                    total: {$sum: 1}
+                }
+            }
+        ]);
+        return res.status(StatusCodes.OK).json(data);
+    } catch(error) {
+        return next(createCustomError(error, StatusCodes.INTERNAL_SERVER_ERROR));
+    }
+});
+
+module.exports = { updateUser, deleteUser, getUser, getAllUsers, getStats };

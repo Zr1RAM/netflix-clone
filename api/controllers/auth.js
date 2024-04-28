@@ -10,7 +10,7 @@ const register = asyncWrapper(async (req, res, next) => {
     try {
         req.body.password = CryptoJS.AES.encrypt(req.body.password, process.env.SECRET_KEY).toString();
         const user = await User.create(req.body);
-        const { password, ...userWithoutPassword } = user;
+        const { password, ...userWithoutPassword } = user._doc;
         res.status(StatusCodes.CREATED).json({ msg: "new user registered", user: userWithoutPassword});
     } catch (error) {
         console.log(error);

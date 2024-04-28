@@ -6,6 +6,8 @@ require("dotenv").config();
 const connectDB = require('./connect');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
+const movieRoutes = require('./routes/movies');
+const listRoutes = require('./routes/lists');
 const errorHandlerMiddleware = require('./middleware/error-handler');
 const authenticateUser = require('./middleware/verifyToken');
 const cookieParser = require('cookie-parser');
@@ -35,6 +37,8 @@ const setUpRoutes = () => {
     app.use(authenticateUser);
 
     app.use('/api/users', userRoutes);
+    app.use('/api/movies', movieRoutes);
+    app.use('/api/lists', listRoutes);
 
     // error handling should be last
     app.use(errorHandlerMiddleware);
