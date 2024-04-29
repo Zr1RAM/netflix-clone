@@ -3,14 +3,6 @@ const { createCustomError } = require("../errors/custom-error");
 const asyncWrapper = require("../middleware/asyncWrapper");
 const Movie = require('../models/Movie');
 
-// middleware checks if user is admin before processing any of the endpoints.
-const checkPrivileges = (req, res, next) => {
-    if(req.userInfo.isAdmin) {
-        next();
-    } else {
-        return next(createCustomError('you are not allowed', StatusCodes.FORBIDDEN));
-    }
-}
 
 // Create new movie
 const addMovie = asyncWrapper(async (req, res, next) => {
@@ -87,7 +79,6 @@ const getAllMovies = asyncWrapper(async (req, res, next) => {
 module.exports = { 
     addMovie, 
     updateMovie, 
-    checkPrivileges, 
     deleteMovie, 
     getMovie, 
     getRandomMovieOrSeries, 

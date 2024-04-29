@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const MovieModel = require("./Movie");
 
 const ListSchema = new mongoose.Schema(
     {
@@ -13,9 +14,10 @@ const ListSchema = new mongoose.Schema(
         genre: {
             type: String,
         },
-        content: {
-            type: Array,
-        },
+        content: [{
+            type: mongoose.Types.ObjectId,
+            ref: 'Movie'
+        }],
     }, 
     { timestamps: true }
 );

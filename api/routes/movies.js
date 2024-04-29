@@ -1,12 +1,12 @@
 const { 
     addMovie, 
     updateMovie, 
-    checkPrivileges, 
     deleteMovie, 
     getMovie, 
     getRandomMovieOrSeries, 
     getAllMovies
  } = require("../controllers/movies");
+const checkPrivileges = require("../middleware/authorization");
 
 const router = require("express").Router();
 
