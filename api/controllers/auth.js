@@ -40,7 +40,7 @@ const login = asyncWrapper(async (req, res, next) => {
             secure: true,
         })
         .status(StatusCodes.OK)
-        .json({ msg: "Login successful", userInfo:{ ...info }});
+        .json({ msg: "Login successful", userInfo:{ ...info, accessToken }});
     } else {
         return next(createCustomError('Incorrect username or password', StatusCodes.UNAUTHORIZED));
     }

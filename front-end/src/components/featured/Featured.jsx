@@ -1,12 +1,39 @@
 import { InfoOutlined, PlayArrow } from '@material-ui/icons'
 import './featured.scss'
+import { useEffect, useState } from 'react'
+import { makeRequest } from '../../axios';
 
 const Featured = ({type}) => {
+    //console.log(type);
+    const [content, setContent] = useState({});
+
+    useEffect(() => {
+        const getFeaturedMovie = async () => {
+            try {
+                const accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjAwNDNkZGE0ZmE3MjJkYWI5NTc3YiIsImlzQWRtaW4iOnRydWUsImlhdCI6MTcxNTU4MTAwMCwiZXhwIjoxNzE2MDEzMDAwfQ.TeCfrxHO1sInG2M5BJxmpIZ-sejprim42_RO_8GteSM";
+                const res = await makeRequest(`/movies/random?type=${type}` , {
+                    headers: {
+                        accessToken: "Bearer " + accessToken,
+                    }
+                });
+                //console.log(res.data[0]);
+                setContent(res.data[0]);
+                //console.log(content);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        getFeaturedMovie();
+
+    }, [type]);
+
+
   return (
     <div className='featured'>
         {type && (
             <div className="category">
-                <span>{type === "movie" ? 'Movies' : 'Series'}</span>
+                <span>{type === "movies" ? 'Movies' : 'Series'}</span>
                 <select name="genre" id="genre">
                     <option>Genre</option>
                     <option value="adventure">Adventure</option>
@@ -26,18 +53,17 @@ const Featured = ({type}) => {
             </div>
         )}
         <img 
-            src="https://i.pinimg.com/564x/99/f8/70/99f8702093bd74454c4636a33f558c4a.jpg" 
+            src={content.img} 
             alt="" 
         /> 
         <div className="info">
             <img 
                 id='title'
-                src="https://www.gamespot.com/a/uploads/original/1573/15735876/3581213-joker-logo.png" 
+                src={content.imgThumbnail} 
                 alt="" 
             />
             <span className='desc'>
-                Insert long ass description about the movie... like a paragraph 
-                should do the trick
+                {content.desc}
             </span>
             <div className="buttons">
                 <button className="play">
