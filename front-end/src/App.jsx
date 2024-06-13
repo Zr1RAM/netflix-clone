@@ -12,7 +12,7 @@ import {
 } from "react-router-dom";
 
 function App() {
-  const user = true;
+  const user = false;
   return (
     <Router>
       <Routes>
@@ -36,7 +36,7 @@ function App() {
             <Route path="/movies" element={<Home type={"movies"}/>} />
             <Route path="/series" element={<Home type={"series"}/>} />
             <Route path="/watch" element={<Watch/>} />
-          </> : <Navigate to={"/register"}/>
+          </> : <Route path="*" element={<Navigate to="/register" />} />
         }
         
       </Routes>

@@ -78,20 +78,20 @@ const getStats = asyncWrapper(async (req, res, next) => {
     const today = new Date();
     const lastYear = today.setFullYear(today.setFullYear() - 1);
 
-    const monthsArray = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-    ];
+    // const monthsArray = [
+    //     "January",
+    //     "February",
+    //     "March",
+    //     "April",
+    //     "May",
+    //     "June",
+    //     "July",
+    //     "August",
+    //     "September",
+    //     "October",
+    //     "November",
+    //     "December",
+    // ];
 
     try {
         const data = await User.aggregate([
@@ -105,7 +105,12 @@ const getStats = asyncWrapper(async (req, res, next) => {
                     _id: "$month", 
                     total: {$sum: 1}
                 }
-            }
+            }, 
+            // {
+            //     $sort: {
+            //         _id: 1
+            //     }
+            // }
         ]);
         return res.status(StatusCodes.OK).json(data);
     } catch(error) {

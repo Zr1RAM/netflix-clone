@@ -9,6 +9,7 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const movieRoutes = require('./routes/movies');
 const listRoutes = require('./routes/lists');
+const firebaseRoutes = require("./routes/firebase");
 const errorHandlerMiddleware = require('./middleware/error-handler');
 const authenticateUser = require('./middleware/verifyToken');
 const cookieParser = require('cookie-parser');
@@ -24,9 +25,21 @@ const setUpRoutes = () => {
     //     next();
     // });
     app.use(express.json());
+
+    const allowedOrigins = [
+        "http://127.0.0.1:5173",
+        "http://localhost:3003"
+    ];
     app.use(cors({
         credentials: true,
-        origin: "http://127.0.0.1:5173"
+        origin: allowedOrigins,
+        // origin: (origin, callback) => {
+        //     if(allowedOrigins.indexOf(origin) !== -1 || !origin) {
+        //         callback(null, true);
+        //     } else {
+        //         callback(new Error("Not allowed by CORS"));
+        //     }
+        // }
     }));
     app.use(cookieParser());
 
@@ -36,6 +49,7 @@ const setUpRoutes = () => {
     app.use("/api/auth", authRoutes);
     // verify token / authentication 
     app.use(authenticateUser);
+    app.use('/api/firebase', firebaseRoutes);
 
     app.use('/api/users', userRoutes);
     app.use('/api/movies', movieRoutes);

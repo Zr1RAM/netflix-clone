@@ -6,6 +6,10 @@ const Movie = require('../models/Movie');
 
 // Create new movie
 const addMovie = asyncWrapper(async (req, res, next) => {
+    console.log(req.body);
+    // const movie = req.body;
+    // console.log(movie);
+    // delete movie.video; // this removes the video key value pair from the object
     try {
         const addMovie = await Movie.create(req.body);
         return res.status(StatusCodes.CREATED).json(addMovie);
